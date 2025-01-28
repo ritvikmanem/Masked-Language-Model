@@ -20,3 +20,47 @@ Masked Language Modeling is a pre-training task for language models like BERT, w
 - Install dependencies using the provided `requirements.txt` file:
   ```bash
   pip3 install -r requirements.txt
+## Generating Attention Diagrams
+The script also visualizes attention patterns across tokens in the input text. Each diagram represents attention weights for specific layers and heads of the BERT model. For instance:
+
+**Input:**  
+`"The [MASK] sat on the mat."`
+
+**Output:**  
+Attention diagrams are generated and saved as image files:  
+- `Attention_Layer1_Head1.png`  
+- `Attention_Layer1_Head2.png`  
+- ...  
+
+These diagrams show the relationships between tokens based on attention weights.
+
+---
+
+## Analysis of Attention Heads
+From the analysis, attention heads exhibit distinct behaviors. For example:
+
+### Layer 5, Head 8:
+Focuses on relationships between nouns and their adjectives.
+
+**Example Sentences:**  
+1. `"The [MASK] car drove down the empty street."`  
+   - **Prediction:** `"red"`, `"blue"`, `"fast"`.  
+   - The head attends to "car" and associates it with likely adjectives.  
+
+2. `"She bought a [MASK] dress."`  
+   - **Prediction:** `"beautiful"`, `"red"`, `"new"`.  
+   - The head attends to "dress" and connects it with descriptive adjectives.  
+
+---
+
+### Layer 7, Head 3:
+Appears to capture verb-subject relationships.
+
+**Example Sentences:**  
+1. `"The dog [MASK] quickly."`  
+   - **Prediction:** `"ran"`, `"jumped"`, `"barked"`.  
+   - The head connects "dog" to likely actions.  
+
+2. `"A bird [MASK] into the room."`  
+   - **Prediction:** `"flew"`, `"came"`, `"glided"`.  
+   - The head links "bird" with typical movements.
