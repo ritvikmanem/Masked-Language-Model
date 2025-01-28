@@ -36,31 +36,39 @@ These diagrams show the relationships between tokens based on attention weights.
 
 ---
 
-## Analysis of Attention Heads
-From the analysis, attention heads exhibit distinct behaviors. For example:
 
-### Layer 5, Head 8:
-Focuses on relationships between nouns and their adjectives.
+## How It Works
+
+1. **Input and Tokenization**:
+   - The user provides a sentence containing a `[MASK]` token (e.g., "The turtle moved slowly across the [MASK].").
+   - The `AutoTokenizer` processes the input, converting it into token IDs, including special tokens like `[CLS]` (start), `[SEP]` (end), and `[MASK]`.
+
+2. **BERT Model**:
+   - The tokenized input is passed to `TFBertForMaskedLM`, a pre-trained BERT model designed for masked language modeling.
+   - BERT uses **self-attention mechanisms** to determine the context of the `[MASK]` token by analyzing its relationships with other tokens in the sequence.
+
+3. **Attention Mechanism**:
+   - Self-attention allows BERT to compute attention scores for every token pair, showing how much focus one token places on another.
+   - Each attention layer contains multiple **attention heads**, with each head specializing in different patterns (e.g., word order, grammar relationships).
+
+4. **Visualization**:
+   - The program visualizes attention weights as grids, where lighter colors indicate stronger attention.
+   - These diagrams offer insights into how BERT processes language, such as identifying relationships between words (e.g., adverbs modifying verbs).
+
 
 **Example Sentences:**  
-1. `"The [MASK] car drove down the empty street."`  
+1. Input: `"The [MASK] car drove down the empty street."`  
    - **Prediction:** `"red"`, `"blue"`, `"fast"`.  
    - The head attends to "car" and associates it with likely adjectives.  
 
-2. `"She bought a [MASK] dress."`  
+2. Input: `"She bought a [MASK] dress."`  
    - **Prediction:** `"beautiful"`, `"red"`, `"new"`.  
-   - The head attends to "dress" and connects it with descriptive adjectives.  
+   - The head attends to "dress" and connects it with descriptive adjectives.
+
+3. Input: `"The turtle moved slowly across the [MASK]."`
+   - Prediction: `[MASK]` → "field", "water", "road", etc.  
+   - Visualization: Attention heads show how "slowly" attends to "moved" and other relationships in the sentence.
 
 ---
 
-### Layer 7, Head 3:
-Appears to capture verb-subject relationships.
 
-**Example Sentences:**  
-1. `"The dog [MASK] quickly."`  
-   - **Prediction:** `"ran"`, `"jumped"`, `"barked"`.  
-   - The head connects "dog" to likely actions.  
-
-2. `"A bird [MASK] into the room."`  
-   - **Prediction:** `"flew"`, `"came"`, `"glided"`.  
-   - The head links "bird" with typical movements.
