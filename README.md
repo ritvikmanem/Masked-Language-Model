@@ -56,7 +56,7 @@ These diagrams show the relationships between tokens based on attention weights.
    - These diagrams offer insights into how BERT processes language, such as identifying relationships between words (e.g., adverbs modifying verbs).
 
 
-**Example Sentences:**  
+## Example Sentences:
 1. Input: `"The [MASK] car drove down the empty street."`  
    - **Prediction:** `"red"`, `"blue"`, `"fast"`.  
    - The head attends to "car" and associates it with likely adjectives.  
