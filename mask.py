@@ -3,13 +3,13 @@ import tensorflow as tf
 from PIL import Image, ImageDraw, ImageFont
 from transformers import AutoTokenizer, TFBertForMaskedLM
 
-# Pre-trained masked language model
+#Pre-trained masked language model
 MODEL = "bert-base-uncased"
 
-# Number of predictions to generate
+#Number of predictions to generate
 K = 3
 
-# Constants for generating attention diagrams
+#Constants for generating attention diagrams
 FONT_PATH = "assets/fonts/OpenSans-Regular.ttf"
 GRID_SIZE = 40
 PIXELS_PER_WORD = 200
@@ -17,24 +17,24 @@ PIXELS_PER_WORD = 200
 def main():
     text = input("Text: ")
 
-    # Tokenize input
+    #Tokenize input
     tokenizer = AutoTokenizer.from_pretrained(MODEL)
     inputs = tokenizer(text, return_tensors="tf")
     mask_token_index = get_mask_token_index(tokenizer.mask_token_id, inputs)
     if mask_token_index is None:
         sys.exit(f"Input must include mask token {tokenizer.mask_token}.")
 
-    # Use model to process input
+    #Use model to process input
     model = TFBertForMaskedLM.from_pretrained(MODEL)
     result = model(**inputs, output_attentions=True)
 
-    # Generate predictions
+    #Generate predictions
     mask_token_logits = result.logits[0, mask_token_index]
     top_tokens = tf.math.top_k(mask_token_logits, K).indices.numpy()
     for token in top_tokens:
         print(text.replace(tokenizer.mask_token, tokenizer.decode([token])))
 
-    # Visualize attentions
+    #Visualize attentions
     visualize_attentions(tokenizer.convert_ids_to_tokens(inputs["input_ids"].numpy()[0]), result.attentions)
 
 def get_mask_token_index(mask_token_id, inputs):
@@ -88,21 +88,21 @@ def generate_diagram(layer_number, head_number, tokens, attention_weights):
     The diagram is saved with a filename that includes both the `layer_number`
     and `head_number`.
     """
-    # Try to load the font; use a fallback if unavailable
+    #Try to load the font; use a fallback if unavailable
     try:
         font = ImageFont.truetype(FONT_PATH, 28)
     except IOError:
         print(f"Font not found at {FONT_PATH}. Using default font.")
         font = ImageFont.load_default()
 
-    # Create new image
+    #Create new image
     image_size = GRID_SIZE * len(tokens) + PIXELS_PER_WORD
     img = Image.new("RGBA", (image_size, image_size), "black")
     draw = ImageDraw.Draw(img)
 
-    # Draw each token onto the image
+    #Draw each token onto the image
     for i, token in enumerate(tokens):
-        # Draw token columns
+        #Draw token columns
         token_image = Image.new("RGBA", (image_size, image_size), (0, 0, 0, 0))
         token_draw = ImageDraw.Draw(token_image)
         token_draw.text(
@@ -114,7 +114,7 @@ def generate_diagram(layer_number, head_number, tokens, attention_weights):
         token_image = token_image.rotate(90)
         img.paste(token_image, mask=token_image)
 
-        # Draw token rows
+        #Draw token rows
         _, _, width, _ = draw.textbbox((0, 0), token, font=font)
         draw.text(
             (PIXELS_PER_WORD - width, PIXELS_PER_WORD + i * GRID_SIZE),
@@ -123,7 +123,7 @@ def generate_diagram(layer_number, head_number, tokens, attention_weights):
             font=font
         )
 
-    # Draw each word
+    #Draw each word
     for i in range(len(tokens)):
         y = PIXELS_PER_WORD + i * GRID_SIZE
         for j in range(len(tokens)):
@@ -131,7 +131,7 @@ def generate_diagram(layer_number, head_number, tokens, attention_weights):
             color = get_color_for_attention_score(attention_weights[i][j])
             draw.rectangle((x, y, x + GRID_SIZE, y + GRID_SIZE), fill=color)
 
-    # Save image
+    #Save image
     img.save(f"Attention_Layer{layer_number}_Head{head_number}.png")
 
 if __name__ == "__main__":
