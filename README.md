@@ -28,9 +28,9 @@ The script also visualizes attention patterns across tokens in the input text. E
 
 **Output:**  
 Attention diagrams are generated and saved as image files:  
-- `Attention_Layer1_Head1.png`  
-- `Attention_Layer1_Head2.png`  
-- ...  
+- ![Attention_Layer1_Head6.png](Attention_Layer1_Head6.png)
+- ![Attention_Layer1_Head6.png](Attention_Layer1_Head6.png)
+- ![Attention_Layer8_Head11.png](Attention_Layer8_Head11.png)  
 
 These diagrams show the relationships between tokens based on attention weights.
 
