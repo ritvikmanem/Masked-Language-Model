@@ -50,21 +50,15 @@ def get_mask_token_index(mask_token_id, inputs):
 
 def get_color_for_attention_score(attention_score):
     """
-    Return a tuple of three integers representing a shade of gray for the
-    given `attention_score`. Each value should be in the range [0, 255].
+    Returns a tuple of three integers representing a shade of gray for the
+    given `attention_score`.
     """
     gray_value = int(attention_score * 255)
     return (gray_value, gray_value, gray_value)
 
 def visualize_attentions(tokens, attentions):
     """
-    Produce a graphical representation of self-attention scores.
-
-    For each attention layer, one diagram should be generated for each
-    attention head in the layer. Each diagram should include the list of
-    `tokens` in the sentence. The filename for each diagram should
-    include both the layer number (starting count from 1) and head number
-    (starting count from 1).
+    Produces a graphical representation of self-attention scores.
     """
     num_layers = len(attentions)
     num_heads = attentions[0][0].shape[0]
@@ -80,7 +74,7 @@ def visualize_attentions(tokens, attentions):
 
 def generate_diagram(layer_number, head_number, tokens, attention_weights):
     """
-    Generate a diagram representing the self-attention scores for a single
+    Generates a diagram representing the self-attention scores for a single
     attention head. The diagram shows one row and column for each of the
     `tokens`, and cells are shaded based on `attention_weights`, with lighter
     cells corresponding to higher attention scores.
